@@ -1,0 +1,54 @@
+background_noise:
+  noise_path: "/home/woongjae/noise-tracing/Noise/Noise/musan/noise"
+
+background_music:
+  music_path: "/home/woongjae/noise-tracing/Noise/Noise/musan/music"
+
+gaussian_noise:
+  min_std_dev: 0.01
+  max_std_dev: 0.2
+  mean: 0.0
+
+high_pass_filter:
+  min_cutoff_freq: 2000
+  max_cutoff_freq: 4000
+
+low_pass_filter:
+  min_cutoff_freq: 300
+  max_cutoff_freq: 1500
+
+freq_minus:
+  num_operations: 5
+  max_freq: 4300
+  min_energy: 0.01
+  max_energy: 0.1
+
+freq_plus:
+  num_operations: 5
+  max_freq: 4300
+  min_energy: 0.01
+  max_energy: 0.1
+
+pitch_shift_down:
+  min_semitones: -5
+  max_semitones: -2
+
+pitch_shift_up:
+  min_semitones: 2
+  max_semitones: 5
+
+time_stretch:
+  min_factor: 0.6
+  max_factor: 1.4
+
+auto_tune:
+  correction_method: closest
+
+echo:
+  min_delay: 0.1
+  max_delay: 0.5
+  min_decay: 0.3
+  max_decay: 0.8
+
+reverberation:
+  rir_path: "/home/woongjae/noise-tracing/Noise/Noise/RIRS_NOISES"

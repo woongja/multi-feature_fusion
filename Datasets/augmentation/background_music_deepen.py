@@ -57,48 +57,76 @@ class BackgroundMusicAugmentor(BaseAugmentor):
         music_list = recursive_list_files(music_path)
         return music_list
 
+    # def transform(self):
+    #     """
+    #     Transform the original audio by overlaying background music at 50% volume.
+    #     """
+    #     # Fast random selection using numpy for large lists
+    #     if len(self.music_list) == 0:
+    #         #logger.warning("No music files available, skipping augmentation")
+    #         self.augmented_audio = self.data
+    #         return
+            
+    #     # Use numpy's random choice for better performance with large arrays
+    #     if isinstance(self.music_list, np.ndarray):
+    #         selected_music = np.random.choice(self.music_list)
+    #     else:
+    #         selected_music = random.choice(self.music_list)
+            
+    #     # #logger.debug(f"Selected music file: {selected_music}")
+    #     music_data, music_sr = librosa.load(selected_music, sr=self.sr)
+        
+    #     # Get the lengths of both audio signals
+    #     audio_length = len(self.data)
+    #     music_length = len(music_data)
+        
+    #     # #logger.debug(f"Audio length: {audio_length} samples, Music length: {music_length} samples")
+        
+    #     # Handle music duration - repeat or trim as needed
+    #     if music_length < audio_length:
+    #         # If music is shorter, repeat it to cover the entire audio
+    #         repeats_needed = (audio_length // music_length) + 1
+    #         music_data = np.tile(music_data, repeats_needed)
+    #         # #logger.debug(f"Music repeated {repeats_needed} times to match audio length")
+        
+    #     # Trim music to match the exact length of the original audio
+    #     music_data = music_data[:audio_length]
+        
+    #     # Reduce music volume to 50% (multiply by 0.5)
+    #     music_data_50_percent = music_data * 0.5
+        
+    #     # Overlay the background music at 50% volume onto the original audio
+    #     augmented_data = self.data + music_data_50_percent
+        
+    #     # Convert to pydub for saving (as required by base class)
+    #     self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
+    
     def transform(self):
-        """
-        Transform the original audio by overlaying background music at 50% volume.
-        """
-        # Fast random selection using numpy for large lists
-        if len(self.music_list) == 0:
-            #logger.warning("No music files available, skipping augmentation")
+        if len(self.noise_list) == 0:
             self.augmented_audio = self.data
             return
-            
-        # Use numpy's random choice for better performance with large arrays
-        if isinstance(self.music_list, np.ndarray):
-            selected_music = np.random.choice(self.music_list)
-        else:
-            selected_music = random.choice(self.music_list)
-            
-        # #logger.debug(f"Selected music file: {selected_music}")
-        music_data, music_sr = librosa.load(selected_music, sr=self.sr)
-        
-        # Get the lengths of both audio signals
+
+        selected_noise = np.random.choice(self.noise_list)
+        noise_data, _ = librosa.load(selected_noise, sr=self.sr)
+
+        # 원본과 길이 맞춤
         audio_length = len(self.data)
-        music_length = len(music_data)
-        
-        # #logger.debug(f"Audio length: {audio_length} samples, Music length: {music_length} samples")
-        
-        # Handle music duration - repeat or trim as needed
-        if music_length < audio_length:
-            # If music is shorter, repeat it to cover the entire audio
-            repeats_needed = (audio_length // music_length) + 1
-            music_data = np.tile(music_data, repeats_needed)
-            # #logger.debug(f"Music repeated {repeats_needed} times to match audio length")
-        
-        # Trim music to match the exact length of the original audio
-        music_data = music_data[:audio_length]
-        
-        # Reduce music volume to 50% (multiply by 0.5)
-        music_data_50_percent = music_data * 0.5
-        
-        # Overlay the background music at 50% volume onto the original audio
-        augmented_data = self.data + music_data_50_percent
-        
-        # Convert to pydub for saving (as required by base class)
+        if len(noise_data) < audio_length:
+            repeats = (audio_length // len(noise_data)) + 1
+            noise_data = np.tile(noise_data, repeats)
+        noise_data = noise_data[:audio_length]
+
+        # 🔥 변경된 부분: 랜덤 SNR (-5 ~ +5 dB 혹은 5~15 dB)
+        # snr_db = np.random.uniform(-5, 5)  # 배경 노이즈는 (-5 ~ +5)
+        snr_db = np.random.uniform(5, 20) # 배경 음악은 (5 ~ 15)
+
+        # 원본 신호 파워 계산
+        audio_power = np.mean(self.data ** 2)
+        noise_power = np.mean(noise_data ** 2)
+        desired_noise_power = audio_power / (10 ** (snr_db / 10))
+        scaling_factor = np.sqrt(desired_noise_power / noise_power)
+
+        augmented_data = self.data + noise_data * scaling_factor
         self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
     
     @classmethod
