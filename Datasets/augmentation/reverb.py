@@ -42,4 +42,5 @@ class ReverbAugmentor(BaseAugmentor):
         
         # transform to pydub audio segment
         self.augmented_audio = librosa_to_pydub(reverberate, sr=self.sr)
+        self.ratio = f"rir_file: {self.rir_file}"
     

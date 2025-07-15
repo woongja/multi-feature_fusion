@@ -107,4 +107,4 @@ class FrequencyOperationAugmentor(BaseAugmentor):
         
         # Store as numpy array (convert to pydub only for saving)
         self.augmented_audio = augmented_data
-        
+        self.ratio = f"{self.operation_type}: {self.num_operations}-{self.min_energy}-{self.max_energy}"

@@ -140,3 +140,4 @@ class AutoTuneAugmentor(BaseAugmentor):
 
         self.augmented_audio = autotune(self.audio_data, self.sr, correction_function)
         self.augmented_audio = librosa_to_pydub(self.augmented_audio, sr=self.sr)
+        self.ratio = f"autotune:{self.correction_method}"

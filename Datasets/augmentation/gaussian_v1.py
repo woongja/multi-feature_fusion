@@ -51,3 +51,4 @@ class GaussianAugmentor(BaseAugmentor):
         
         self.augmented_audio = self.data + noise
         self.augmented_audio = librosa_to_pydub(self.augmented_audio, sr=self.sr)
+        self.ratio = f"std_dev: {self.std_dev:.4f}"

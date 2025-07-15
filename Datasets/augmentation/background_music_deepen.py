@@ -128,7 +128,8 @@ class BackgroundMusicAugmentor(BaseAugmentor):
 
         augmented_data = self.data + noise_data * scaling_factor
         self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
-    
+        self.ratio = f"snr: {snr_db:.2f} dB"
+
     @classmethod
     def clear_cache(cls):
         """Clear the music list cache. Useful when files are added/removed."""

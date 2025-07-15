@@ -64,7 +64,8 @@ def main():
             'file_path': out_clean_path,
             'group': group,
             'label2': label2,
-            'label1': 'clean'
+            'label1': 'clean',
+            'ratio' : '-'
         })
 
         # 증강 종류별로 반복
@@ -85,7 +86,8 @@ def main():
                 'file_path': out_wav_path,
                 'group': group,
                 'label2': label2,
-                'label1': aug_name
+                'label1': aug_name,
+                'ratio' : augmentor.ratio
             })
     # 결과 csv 저장
     pd.DataFrame(records).to_csv(OUTPUT_CSV, index=False)

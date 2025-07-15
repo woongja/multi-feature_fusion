@@ -37,3 +37,4 @@ class LowPassFilterAugmentor(BaseAugmentor):
         self.augmented_audio = self.my_transform(
             samples=self.audio_data, sample_rate=self.sr)
         self.augmented_audio = librosa_to_pydub(self.augmented_audio)
+        self.ratio = f"cutoff_freq: {self.my_transform.min_cutoff_freq} - {self.my_transform.max_cutoff_freq} Hz"

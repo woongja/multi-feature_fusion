@@ -52,5 +52,6 @@ class EchoAugmentor(BaseAugmentor):
         # Convert to numpy
         self.augmented_audio = self.augmented_audio.numpy()
         self.augmented_audio = librosa_to_pydub(self.augmented_audio, sr=self.sr)
+        self.ratio = f"decay={self.min_decay}-{self.max_decay}"
 
         

@@ -26,12 +26,12 @@ class PitchAugmentor(BaseAugmentor):
         self.min_semitones = config["min_semitones"]
         self.max_semitones = config["max_semitones"]
         
-        self.pitch_augmentor = PitchShift(
-            min_semitones=self.min_semitones,
-            max_semitones=self.max_semitones,
-            method="librosa_phase_vocoder",
-            p=1.0
-        )
+        # self.pitch_augmentor = PitchShift(
+        #     min_semitones=self.min_semitones,
+        #     max_semitones=self.max_semitones,
+        #     method="librosa_phase_vocoder",
+        #     p=1.0
+        # )
 
     def transform(self):
         """
@@ -41,8 +41,16 @@ class PitchAugmentor(BaseAugmentor):
                        If None, applies a random shift in the range
         :return: The pitch-shifted audio segment
         """
+        n_steps = np.random.uniform(self.min_semitones, self.max_semitones)
+        pitch_aug = PitchShift(
+            min_semitones=n_steps,
+            max_semitones=n_steps,   # min==max로 고정시킴
+            method="librosa_phase_vocoder",
+            p=1.0
+        )
         augmented_data = self.pitch_augmentor(self.data, sample_rate=self.sr)
         
         # Transform to pydub audio segment
         self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
+        self.ratio = f"pitch:{n_steps}"
  
