@@ -102,11 +102,11 @@ class BackgroundMusicAugmentor(BaseAugmentor):
     #     self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
     
     def transform(self):
-        if len(self.noise_list) == 0:
+        if len(self.music_list) == 0:
             self.augmented_audio = self.data
             return
 
-        selected_noise = np.random.choice(self.noise_list)
+        selected_noise = np.random.choice(self.music_list)
         noise_data, _ = librosa.load(selected_noise, sr=self.sr)
 
         # 원본과 길이 맞춤

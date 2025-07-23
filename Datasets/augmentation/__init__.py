@@ -5,7 +5,7 @@ from .reverb import ReverbAugmentor
 from .speed import SpeedAugmentor
 from .volume import VolumeAugmentor
 from .telephone import TelephoneEncodingAugmentor
-from .gaussian import GaussianAugmentor
+from .gaussian_v1 import GaussianAugmentor
 from .copy_paste import CopyPasteAugmentor
 from .base import BaseAugmentor
 from .time_masking import TimeMaskingAugmentor

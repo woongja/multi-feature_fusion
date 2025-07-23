@@ -42,14 +42,10 @@ class PitchAugmentor(BaseAugmentor):
         :return: The pitch-shifted audio segment
         """
         n_steps = np.random.uniform(self.min_semitones, self.max_semitones)
-        pitch_aug = PitchShift(
-            min_semitones=n_steps,
-            max_semitones=n_steps,   # min==max로 고정시킴
-            method="librosa_phase_vocoder",
-            p=1.0
-        )
-        augmented_data = self.pitch_augmentor(self.data, sample_rate=self.sr)
-        
+        while n_steps == 0:
+            n_steps = np.random.randint(self.min_semitones, self.max_semitones + 1)
+        # librosa로 적용
+        augmented_data = librosa.effects.pitch_shift(y = self.data, sr = self.sr, n_steps=n_steps)
         # Transform to pydub audio segment
         self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
         self.ratio = f"pitch:{n_steps}"

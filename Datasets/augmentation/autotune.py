@@ -93,14 +93,38 @@ def autotune(audio, sr, correction_function):
 
     if frame_length > len(audio):
         frame_length = 1024  # Adjust dynamically
-    # Pitch tracking using the PYIN algorithm.
+    # Pitch tracking using simpler method to avoid numba compatibility issues
     #print("Pitch tracking...")
-    f0, voiced_flag, voiced_probabilities = librosa.pyin(audio,
-                                                         frame_length=frame_length,
-                                                         hop_length=hop_length,
-                                                         sr=sr,
-                                                         fmin=fmin,
-                                                         fmax=fmax)
+    try:
+        f0, voiced_flag, voiced_probabilities = librosa.pyin(audio,
+                                                             frame_length=frame_length,
+                                                             hop_length=hop_length,
+                                                             sr=sr,
+                                                             fmin=fmin,
+                                                             fmax=fmax)
+    except Exception as e:
+        # Fallback to harmonic mean for pitch estimation
+        print(f"PYIN failed due to numba issue, using fallback pitch estimation: {e}")
+        # Use a simple autocorrelation-based pitch detection
+        stft = librosa.stft(audio, hop_length=hop_length, n_fft=frame_length)
+        frequencies = np.fft.fftfreq(frame_length, 1/sr)
+        magnitude = np.abs(stft)
+        
+        # Find fundamental frequency by peak detection
+        f0 = np.zeros(stft.shape[1])
+        for i in range(stft.shape[1]):
+            spectrum = magnitude[:, i]
+            peaks = sig.find_peaks(spectrum, height=np.max(spectrum)*0.1)[0]
+            if len(peaks) > 0:
+                # Take the lowest frequency peak as fundamental
+                fundamental_idx = peaks[np.argmin(frequencies[peaks][frequencies[peaks] > fmin])] if len(peaks[frequencies[peaks] > fmin]) > 0 else peaks[0]
+                f0[i] = abs(frequencies[fundamental_idx])
+            else:
+                f0[i] = np.nan
+        
+        # Simple voiced/unvoiced detection based on energy
+        voiced_flag = np.sum(magnitude, axis=0) > np.mean(np.sum(magnitude, axis=0)) * 0.5
+        voiced_probabilities = voiced_flag.astype(float)
 
     # Apply the chosen adjustment strategy to the pitch.
     #print("Correcting pitch...")

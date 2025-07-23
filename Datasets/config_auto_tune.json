@@ -1,0 +1,13 @@
+{
+  "protocol_csv": "/home/woongjae/noise-tracing/muti-feature_fusion/Datasets/meta_file/meta_clean.csv",
+  "base_output_dir": "/home/woongjae/noise-tracing/muti-feature_fusion/Datasets",
+  "noise_type": "auto_tune",
+  "num_workers": 8,
+  "sample_rate": 16000,
+  "use_common_scales": false,
+  "frame_length": 2048,
+  "seed": null,
+  "sequential": false,
+  "total_scales": 63,
+  "total_files": 49000
+}

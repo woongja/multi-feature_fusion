@@ -44,7 +44,7 @@ class TimeStretchAugmentor(BaseAugmentor):
         rate = np.random.uniform(self.min_rate, self.max_rate)
         ts = TimeStretch(min_rate=rate, max_rate=rate, p=1.0)
         augmented_data = ts(self.data, sample_rate=self.sr)
-        self.augmented_audio = librosa_to_pydub(self.augmented_audio, sr=self.sr)
+        self.augmented_audio = librosa_to_pydub(augmented_data, sr=self.sr)
         self.ratio = f"stretch:{rate:.2f}"
     
     

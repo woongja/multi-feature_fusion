@@ -106,5 +106,5 @@ class FrequencyOperationAugmentor(BaseAugmentor):
         #     augmented_data = np.pad(augmented_data, (0, len(self.data) - len(augmented_data)))
         
         # Store as numpy array (convert to pydub only for saving)
-        self.augmented_audio = augmented_data
+        self.augmented_audio = librosa_to_pydub(augmented_data, self.sr)
         self.ratio = f"{self.operation_type}: {self.num_operations}-{self.min_energy}-{self.max_energy}"

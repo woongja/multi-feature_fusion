@@ -34,12 +34,19 @@ class EchoAugmentor(BaseAugmentor):
         super().load(input_path)
         self.data, self.sr = torchaudio.load(input_path, channels_first=False)
         # Define effects
-        effect = ",".join(
-            [
-                f"aecho=in_gain=0.8:out_gain=0.9:delays={self.min_delay}:decays={self.min_decay}|delays={self.max_delay}:decays={self.max_decay}"
-                # Applying echo gives some dramatic feeling
-            ],
-        )
+        # effect = ",".join(
+        #     [
+        #         f"aecho=in_gain=0.8:out_gain=0.9:delays={self.min_delay}:decays={self.min_decay}|delays={self.max_delay}:decays={self.max_decay}"
+        #         # Applying echo gives some dramatic feeling
+        #     ],
+        # )
+            # Generate random delay and decay values within the specified ranges
+        delay_ms = int(np.random.uniform(self.min_delay, self.max_delay) * 1000)  # convert seconds to milliseconds
+        decay = round(np.random.uniform(self.min_decay, self.max_decay), 2)
+
+        # Define single aecho effect (delays and decays are single values)
+        effect = f"aecho=in_gain=0.8:out_gain=0.9:delays={delay_ms}:decays={decay}"
+        logger.debug(f"Echo effect string: {effect}")
         self.effector = torchaudio.io.AudioEffector(effect=effect)
 
     def transform(self):
@@ -47,7 +54,7 @@ class EchoAugmentor(BaseAugmentor):
         Add echo to the audio with random delay and decay values
         """
         # Generate random delay and decay values within the specified ranges
-        self.augmented_audio = self.effector(self.data, self.sr)
+        self.augmented_audio = self.effector.apply(self.data, self.sr)
         
         # Convert to numpy
         self.augmented_audio = self.augmented_audio.numpy()

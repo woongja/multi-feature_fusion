@@ -2,10 +2,9 @@ import os
 from augmentation import (
     BackgroundNoiseAugmentorDeepen as BackgroundNoiseAugmentor,
     BackgroundMusicAugmentorDeepen as BackgroundMusicAugmentor,
-    GaussianAugmentor,
+    GaussianAugmentorV1,
     HighPassFilterAugmentor,
     LowPassFilterAugmentor,
-    FrequencyOperationAugmentorDeepen as FrequencyOperationAugmentor,
     PitchAugmentor,
     TimeStretchAugmentor,
     AutoTuneAugmentor,
@@ -22,14 +21,12 @@ with open('/home/woongjae/noise-tracing/muti-feature_fusion/Datasets/augmentatio
 AUGMENTATION_CLASSES = {
     'background_noise': BackgroundNoiseAugmentor,
     'background_music': BackgroundMusicAugmentor,
-    'gaussian_noise': GaussianAugmentor,
+    'gaussian_noise': GaussianAugmentorV1,
     'high_pass_filter': HighPassFilterAugmentor,
     'low_pass_filter': LowPassFilterAugmentor,
-    'freq_minus': lambda cfg: FrequencyOperationAugmentor({**cfg, "operation_type": "freq_minus"}),
-    'freq_plus': lambda cfg: FrequencyOperationAugmentor({**cfg, "operation_type": "freq_plus"}),
     'pitch_shift': PitchAugmentor,
     'time_stretch': TimeStretchAugmentor,
-    'auto_tune': AutoTuneAugmentor,
+    # 'auto_tune': AutoTuneAugmentor,
     'echo': EchoAugmentor,
     'reverberation': ReverbAugmentor,
 }
@@ -39,7 +36,9 @@ SAVE_DIR = "/home/woongjae/noise-tracing/muti-feature_fusion/Datasets/aug_test"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
 for aug_name, aug_class in AUGMENTATION_CLASSES.items():
-    config = AUG_CONFIG[aug_name]
+    config = dict(AUG_CONFIG[aug_name])  # config 복사
+    config["output_path"] = SAVE_DIR
+    config["out_format"] = "wav"
     augmentor = aug_class(config)
     augmentor.load(CLEAN_PATH)
     augmentor.transform()
