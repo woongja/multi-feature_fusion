@@ -15,7 +15,7 @@ label_mapping = {
     "clean": 0,
     "background_noise": 1,
     "background_music": 2,
-    "guassian_noise": 3,
+    "gaussian_noise": 3,
     "band_pass_filter": 4,
     "manipulation": 5,
     "auto_tune": 6,
@@ -285,6 +285,10 @@ if __name__ == "__main__":
         f0_len=args.f0_len
     ).to(device)
     
+    # if torch.cuda.device_count() > 1:
+    #     print(f"Using {torch.cuda.device_count()} GPUs for training!")
+    #     model = torch.nn.DataParallel(model)
+
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Total parameters: {total_params:,}")
@@ -303,7 +307,7 @@ if __name__ == "__main__":
     if args.is_eval:
         eval_files = gen_list(args.protocol_file, is_eval=True)
         eval_dataset = MultiFeatureDataset(eval_files, labels=None, is_train=False, is_eval=True)
-        eval_loader = DataLoader(eval_dataset, batch_size=args.batch_size)
+        eval_loader = DataLoader(eval_dataset, batch_size=args.batch_size, num_workers=8, pin_memory=True)
 
         produce_evaluation_file(eval_dataset, model, device, args.save_results, args.batch_size)
 
@@ -320,11 +324,11 @@ if __name__ == "__main__":
 
         train_labels, train_files = gen_list(args.protocol_file, is_train=True)
         train_dataset = MultiFeatureDataset(train_files, train_labels, is_train=True, is_eval=False, enable_cache=True, train_random_start=False)
-        train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+        train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=8, pin_memory=True)
 
         dev_labels, dev_files = gen_list(args.protocol_file, is_dev=True)
         dev_dataset = MultiFeatureDataset(dev_files, dev_labels, is_train=False, is_eval=False, enable_cache=True, train_random_start=False)
-        dev_loader = DataLoader(dev_dataset, batch_size=args.batch_size)
+        dev_loader = DataLoader(dev_dataset, batch_size=args.batch_size, num_workers=8, pin_memory=True)
 
         best_loss = float('inf')
         for epoch in range(1, args.num_epochs + 1):

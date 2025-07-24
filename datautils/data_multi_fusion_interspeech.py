@@ -17,7 +17,7 @@ def gen_list(protocol_file, is_train=False, is_dev=False, is_eval=False):
         "clean": 0,
         "background_noise": 1,
         "background_music": 2,
-        "guassian_noise": 3,
+        "gaussian_noise": 3,
         "band_pass_filter": 4,
         "manipulation": 5,
         "auto_tune": 6,
