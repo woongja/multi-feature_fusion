@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # 기본 설정
-PROTOCOL_FILE="/home/woongjae/multi-feature_fusion/Datasets/protocol_train_dev.txt"
+PROTOCOL_FILE="/home/woongjae/noise-tracing/wj_model/protocol/protocol_train_dev.txt"
 BATCH_SIZE=32
 NUM_EPOCHS=100
 LEARNING_RATE=1e-4
-NUM_CLASSES=9
+NUM_CLASSES=10
 SAVE_PATH="out/best_model.pth"
 EARLY_STOP_PATIENCE=5
 LOG_DIR="runs/alexnetfusion"  # TensorBoard 로그 디렉토리
@@ -14,7 +14,7 @@ input_width=126    # time axis
 f0_len=126      # F0 time frame 수
 
 # Training 실행
-CUDA_VISIBLE_DEVICES=3 python train_interspeech.py \
+CUDA_VISIBLE_DEVICES=1 python train.py \
     --is_train \
     --protocol_file $PROTOCOL_FILE \
     --batch_size $BATCH_SIZE \
@@ -28,3 +28,4 @@ CUDA_VISIBLE_DEVICES=3 python train_interspeech.py \
     --input_width $input_width \
     --f0_len $f0_len
 
+echo "Results saved to ${SAVE_PATH}"
