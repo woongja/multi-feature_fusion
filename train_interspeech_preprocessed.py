@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from tqdm import tqdm
 from datautils.data_preprocessed import PreprocessedDatasetManager
-from models.AlexNet_fusion import FusionNet
+from models.multi_feature_fusion_v3 import FusionNet
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 import sys

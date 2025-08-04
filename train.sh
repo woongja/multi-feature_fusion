@@ -4,9 +4,9 @@
 PROTOCOL_FILE="/home/woongjae/noise-tracing/wj_model/protocol/protocol_train_dev.txt"
 BATCH_SIZE=32
 NUM_EPOCHS=100
-LEARNING_RATE=1e-4
+LEARNING_RATE=1e-5
 NUM_CLASSES=10
-SAVE_PATH="out/best_model.pth"
+SAVE_PATH="out/best_model_paper_3.pth"
 EARLY_STOP_PATIENCE=5
 LOG_DIR="runs/alexnetfusion"  # TensorBoard 로그 디렉토리
 input_height=128   # freq axis for spec

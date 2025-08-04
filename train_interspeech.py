@@ -6,7 +6,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from tqdm import tqdm
 from datautils.data_multi_fusion_interspeech import gen_list, MultiFeatureDataset
-from models.AlexNet_fusion import FusionNet
+from models.multi_feature_fusion import FusionNet
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 import sys
@@ -104,7 +104,7 @@ def produce_evaluation_file(dataset, model, device, save_path, batch_size):
         for spec, mfcc, f0, utt_ids in tqdm(data_loader, ncols=100):
             spec, mfcc, f0 = spec.to(device), mfcc.to(device), f0.to(device)
 
-            outputs = model(spec, f0, mfcc)
+            outputs = model(spec, mfcc, f0)
             if isinstance(outputs, tuple):
                 outputs = outputs[0]
 

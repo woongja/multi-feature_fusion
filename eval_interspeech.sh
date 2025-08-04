@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # 기본 설정
-PROTOCOL_FILE="/home/woongjae/multi-feature_fusion/Datasets/protocol_train_dev.txt"
-PREPROCESSED_DIR="./preprocessed_data"
-BATCH_SIZE=32
+PROTOCOL_FILE="/home/woongjae/noise-tracing/multi-feature_fusion/Datasets/protocol_eval.txt"
+PREPROCESSED_DIR="/data/woongjae/preprocess"
+BATCH_SIZE=64
 NUM_CLASSES=9
-MODEL_PATH="out/best_model.pth"
-RESULTS_FILE="eval_results.txt"
+MODEL_PATH="/home/woongjae/noise-tracing/multi-feature_fusion/out/best_model_interspeech_5.pth"
+RESULTS_FILE="/home/woongjae/noise-tracing/multi-feature_fusion/results/eval_interspeech_results_5.txt"
 input_height=128   # freq axis for spec
 input_width=126    # time axis
 f0_len=126      # F0 time frame 수
@@ -26,7 +26,7 @@ if [ ! -d "$PREPROCESSED_DIR" ]; then
 fi
 
 # Evaluation 실행
-CUDA_VISIBLE_DEVICES=3 python train_interspeech_preprocessed.py \
+CUDA_VISIBLE_DEVICES=0 python train_interspeech_preprocessed.py \
     --is_eval \
     --preprocessed_dir $PREPROCESSED_DIR \
     --model_path $MODEL_PATH \

@@ -101,7 +101,10 @@ class PreprocessedDatasetManager:
         """Find available dataset subsets"""
         subsets = []
         for subset in ['train', 'dev', 'eval']:
+            # Try lowercase first, then capitalized
             index_file = self.preprocessed_dir / f"{subset}_index.json"
+            if not index_file.exists():
+                index_file = self.preprocessed_dir / f"{subset.capitalize()}_index.json"
             if index_file.exists():
                 subsets.append(subset)
         return subsets
@@ -120,7 +123,10 @@ class PreprocessedDatasetManager:
         if subset not in self.available_subsets:
             raise ValueError(f"Subset '{subset}' not available. Available: {self.available_subsets}")
         
+        # Try lowercase first, then capitalized
         index_file = self.preprocessed_dir / f"{subset}_index.json"
+        if not index_file.exists():
+            index_file = self.preprocessed_dir / f"{subset.capitalize()}_index.json"
         
         if is_eval is None:
             is_eval = (subset == 'eval')

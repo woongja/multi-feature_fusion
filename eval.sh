@@ -4,8 +4,8 @@
 PROTOCOL_FILE="/home/woongjae/noise-tracing/wj_model/protocol/protocol_eval.txt"
 BATCH_SIZE=128
 NUM_CLASSES=10
-MODEL_PATH="/home/woongjae/noise-tracing/muti-feature_fusion/out/best_model_old.pth"
-SAVE_RESULTS="/home/woongjae/noise-tracing/muti-feature_fusion/results/eval_timit.txt"
+MODEL_PATH="/home/woongjae/noise-tracing/multi-feature_fusion/out/best_model_paper_3.pth"
+SAVE_RESULTS="/home/woongjae/noise-tracing/multi-feature_fusion/results/eval_timit_3.txt"
 EMBEDDING_SAVE_PATH="/home/woongjae/noise-tracing/wj_model/embeddings"
 input_height=128   # freq axis for spec
 input_width=126    # time axis

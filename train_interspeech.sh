@@ -2,18 +2,18 @@
 
 # 기본 설정
 PROTOCOL_FILE="/home/woongjae/multi-feature_fusion/Datasets/protocol_train_dev.txt"
-PREPROCESSED_DIR="./preprocessed_data"
-BATCH_SIZE=32
+BATCH_SIZE=64
 NUM_EPOCHS=100
 LEARNING_RATE=1e-4
 NUM_CLASSES=9
-SAVE_PATH="out/best_model.pth"
+SAVE_PATH="out/best_model_interspeech_6.pth"
 EARLY_STOP_PATIENCE=5
-LOG_DIR="runs/alexnetfusion_preprocessed"  # TensorBoard 로그 디렉토리
+LOG_DIR="runs/interspeech_preprocessed"  # TensorBoard 로그 디렉토리
 input_height=128   # freq axis for spec
 input_width=126    # time axis
 f0_len=126      # F0 time frame 수
 NUM_WORKERS=8
+PREPROCESSED_DIR="/data/woongjae/preprocess"
 
 # 전처리 여부 확인
 if [ ! -d "$PREPROCESSED_DIR" ]; then
@@ -33,7 +33,7 @@ fi
 mkdir -p $(dirname $SAVE_PATH)
 
 # Training 실행 (전처리된 데이터 사용)
-CUDA_VISIBLE_DEVICES=3 python train_interspeech_preprocessed.py \
+CUDA_VISIBLE_DEVICES=0 python train_interspeech_preprocessed.py \
     --is_train \
     --preprocessed_dir $PREPROCESSED_DIR \
     --batch_size $BATCH_SIZE \
