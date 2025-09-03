@@ -1,0 +1,16 @@
+{
+  "protocols": [
+    "/home/woongjae/noise-tracing/multi-feature_fusion/ICASSP2026/protocols/ASV19_LA_train.txt",
+    "/home/woongjae/noise-tracing/multi-feature_fusion/ICASSP2026/protocols/ASV19_LA_dev.txt",
+    "/home/woongjae/noise-tracing/multi-feature_fusion/ICASSP2026/protocols/ASV19_LA_eval.txt"
+  ],
+  "out_root": "/home/woongjae/noise-tracing/multi-feature_fusion/ICASSP2026/Dataset/NoiseDataset/ASV19_noise_dataset",
+  "augmentation_yaml": "/home/woongjae/noise-tracing/multi-feature_fusion/ICASSP2026/Dataset/NoiseDataset/augmentation_config.yaml",
+  "meta_out": "meta_noise_autotune.csv",
+  "sample_rate": 16000,
+  "copy_clean": true,
+  "force_subset": null,
+  "num_workers": 8,
+  "sequential": false,
+  "seed": null
+}
